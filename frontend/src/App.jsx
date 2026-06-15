@@ -1,8 +1,31 @@
+import { useState } from 'react'
 import './App.css'
 import Dashboard from './pages/Dashboard'
 import AddApplication from './pages/AddApplication'
 
 function App() {
+  const [applications, setApplications] = useState([
+    {
+      company: 'Volkswagen',
+      position: 'Project Manager',
+      status: 'Interview',
+    },
+    {
+      company: 'Siemens Energy',
+      position: 'Senior Project Manager',
+      status: 'Applied',
+    },
+    {
+      company: 'Mapbox',
+      position: 'Principal Technical Program Manager',
+      status: 'Rejected',
+    },
+  ])
+
+  function handleAddApplication(newApplication) {
+    setApplications([...applications, newApplication])
+  }
+
   return (
     <main className="app">
       <section className="hero">
@@ -38,9 +61,9 @@ function App() {
         </div>
       </section>
 
-      <Dashboard />
+      <Dashboard applications={applications} />
 
-      <AddApplication />
+      <AddApplication onAddApplication={handleAddApplication} />
     </main>
   )
 }
