@@ -26,6 +26,14 @@ function App() {
     setApplications([...applications, newApplication])
   }
 
+  function handleDeleteApplication(indexToDelete) {
+    const updatedApplications = applications.filter(
+      (application, index) => index !== indexToDelete
+    )
+
+    setApplications(updatedApplications)
+  }
+
   return (
     <main className="app">
       <section className="hero">
@@ -61,7 +69,10 @@ function App() {
         </div>
       </section>
 
-      <Dashboard applications={applications} />
+      <Dashboard
+        applications={applications}
+        onDeleteApplication={handleDeleteApplication}
+      />
 
       <AddApplication onAddApplication={handleAddApplication} />
     </main>
