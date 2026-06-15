@@ -1,0 +1,24 @@
+{
+  "name": "ai-job-application-tracker",
+  "version": "1.0.0",
+  "description": "AI Job Application Tracker is a full-stack web application that helps job seekers manage their applications in one place and gain valuable insights into their job search process.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A-M82/ai-job-application-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/A-M82/ai-job-application-tracker/issues"
+  },
+  "homepage": "https://github.com/A-M82/ai-job-application-tracker#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
