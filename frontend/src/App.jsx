@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import Dashboard from './pages/Dashboard'
 import AddApplication from './pages/AddApplication'
+import Analytics from './pages/Analytics'
 
 function App() {
   const [applications, setApplications] = useState(() => {
@@ -114,6 +115,8 @@ function App() {
         onUpdateApplication={handleUpdateApplication}
         editingApplication={applications[editingIndex]}
       />
+
+      <Analytics applications={applications} />
     </main>
   )
 }
