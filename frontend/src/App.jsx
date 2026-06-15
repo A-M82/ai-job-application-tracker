@@ -1,5 +1,6 @@
 import './App.css'
 import Dashboard from './pages/Dashboard'
+import AddApplication from './pages/AddApplication'
 
 function App() {
   return (
@@ -38,6 +39,8 @@ function App() {
       </section>
 
       <Dashboard />
+
+      <AddApplication />
     </main>
   )
 }
