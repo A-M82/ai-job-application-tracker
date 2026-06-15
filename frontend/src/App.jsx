@@ -22,8 +22,23 @@ function App() {
     },
   ])
 
+  const [editingIndex, setEditingIndex] = useState(null)
+
   function handleAddApplication(newApplication) {
     setApplications([...applications, newApplication])
+  }
+
+  function handleUpdateApplication(updatedApplication) {
+    const updatedApplications = applications.map((application, index) => {
+      if (index === editingIndex) {
+        return updatedApplication
+      }
+
+      return application
+    })
+
+    setApplications(updatedApplications)
+    setEditingIndex(null)
   }
 
   function handleDeleteApplication(indexToDelete) {
@@ -32,6 +47,10 @@ function App() {
     )
 
     setApplications(updatedApplications)
+  }
+
+  function handleEditApplication(index) {
+    setEditingIndex(index)
   }
 
   return (
@@ -72,9 +91,14 @@ function App() {
       <Dashboard
         applications={applications}
         onDeleteApplication={handleDeleteApplication}
+        onEditApplication={handleEditApplication}
       />
 
-      <AddApplication onAddApplication={handleAddApplication} />
+      <AddApplication
+        onAddApplication={handleAddApplication}
+        onUpdateApplication={handleUpdateApplication}
+        editingApplication={applications[editingIndex]}
+      />
     </main>
   )
 }
