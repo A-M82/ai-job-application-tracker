@@ -50,6 +50,7 @@ function Dashboard({
             <th>Company</th>
             <th>Position</th>
             <th>Status</th>
+            <th>Notes</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -60,6 +61,7 @@ function Dashboard({
               <td>{application.company}</td>
               <td>{application.position}</td>
               <td>{application.status}</td>
+              <td>{application.notes}</td>
 
               <td>
                 <button onClick={() => onEditApplication(index)}>

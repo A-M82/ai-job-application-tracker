@@ -8,12 +8,14 @@ function AddApplication({
   const [company, setCompany] = useState('')
   const [position, setPosition] = useState('')
   const [status, setStatus] = useState('Applied')
+  const [notes, setNotes] = useState('')
 
   useEffect(() => {
     if (editingApplication) {
       setCompany(editingApplication.company)
       setPosition(editingApplication.position)
       setStatus(editingApplication.status)
+      setNotes(editingApplication.notes || '')
     }
   }, [editingApplication])
 
@@ -24,6 +26,7 @@ function AddApplication({
       company,
       position,
       status,
+      notes,
     }
 
     if (editingApplication) {
@@ -35,6 +38,7 @@ function AddApplication({
     setCompany('')
     setPosition('')
     setStatus('Applied')
+    setNotes('')
   }
 
   return (
@@ -73,6 +77,15 @@ function AddApplication({
             <option>Rejected</option>
             <option>Accepted</option>
           </select>
+        </div>
+
+        <div>
+          <label>Notes</label>
+          <textarea
+            placeholder="Interview scheduled for Friday..."
+            value={notes}
+            onChange={(event) => setNotes(event.target.value)}
+          />
         </div>
 
         <button type="submit">
