@@ -17,10 +17,43 @@ function Dashboard() {
     },
   ]
 
+  const totalApplications = applications.length
+  const interviews = applications.filter(
+    (application) => application.status === 'Interview'
+  ).length
+  const applied = applications.filter(
+    (application) => application.status === 'Applied'
+  ).length
+  const rejected = applications.filter(
+    (application) => application.status === 'Rejected'
+  ).length
+
   return (
-    <section>
+    <section className="dashboard">
       <h2>Application Dashboard</h2>
       <p>Overview of current job applications and their status.</p>
+
+      <div className="stats">
+        <div>
+          <h3>{totalApplications}</h3>
+          <p>Total Applications</p>
+        </div>
+
+        <div>
+          <h3>{interviews}</h3>
+          <p>Interviews</p>
+        </div>
+
+        <div>
+          <h3>{applied}</h3>
+          <p>Applied</p>
+        </div>
+
+        <div>
+          <h3>{rejected}</h3>
+          <p>Rejected</p>
+        </div>
+      </div>
 
       <table>
         <thead>
