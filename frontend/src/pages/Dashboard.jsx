@@ -1,4 +1,4 @@
-function Dashboard({ applications }) {
+function Dashboard({ applications, onDeleteApplication }) {
   const totalApplications = applications.length
 
   const interviews = applications.filter(
@@ -46,6 +46,7 @@ function Dashboard({ applications }) {
             <th>Company</th>
             <th>Position</th>
             <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
 
@@ -55,6 +56,11 @@ function Dashboard({ applications }) {
               <td>{application.company}</td>
               <td>{application.position}</td>
               <td>{application.status}</td>
+              <td>
+                <button onClick={() => onDeleteApplication(index)}>
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
