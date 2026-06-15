@@ -1,29 +1,14 @@
-function Dashboard() {
-  const applications = [
-    {
-      company: 'Volkswagen',
-      position: 'Project Manager',
-      status: 'Interview',
-    },
-    {
-      company: 'Siemens Energy',
-      position: 'Senior Project Manager',
-      status: 'Applied',
-    },
-    {
-      company: 'Mapbox',
-      position: 'Principal Technical Program Manager',
-      status: 'Rejected',
-    },
-  ]
-
+function Dashboard({ applications }) {
   const totalApplications = applications.length
+
   const interviews = applications.filter(
     (application) => application.status === 'Interview'
   ).length
+
   const applied = applications.filter(
     (application) => application.status === 'Applied'
   ).length
+
   const rejected = applications.filter(
     (application) => application.status === 'Rejected'
   ).length
