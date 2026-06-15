@@ -1,4 +1,5 @@
 import './App.css'
+import Dashboard from './pages/Dashboard'
 
 function App() {
   return (
@@ -35,6 +36,8 @@ function App() {
           <p>Understand success rates, interview progress, and rejection patterns.</p>
         </div>
       </section>
+
+      <Dashboard />
     </main>
   )
 }
