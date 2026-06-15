@@ -1,20 +1,36 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-function AddApplication({ onAddApplication }) {
+function AddApplication({
+  onAddApplication,
+  onUpdateApplication,
+  editingApplication,
+}) {
   const [company, setCompany] = useState('')
   const [position, setPosition] = useState('')
   const [status, setStatus] = useState('Applied')
 
+  useEffect(() => {
+    if (editingApplication) {
+      setCompany(editingApplication.company)
+      setPosition(editingApplication.position)
+      setStatus(editingApplication.status)
+    }
+  }, [editingApplication])
+
   function handleSubmit(event) {
     event.preventDefault()
 
-    const newApplication = {
+    const applicationData = {
       company,
       position,
       status,
     }
 
-    onAddApplication(newApplication)
+    if (editingApplication) {
+      onUpdateApplication(applicationData)
+    } else {
+      onAddApplication(applicationData)
+    }
 
     setCompany('')
     setPosition('')
@@ -23,7 +39,7 @@ function AddApplication({ onAddApplication }) {
 
   return (
     <section className="dashboard">
-      <h2>Add New Application</h2>
+      <h2>{editingApplication ? 'Edit Application' : 'Add New Application'}</h2>
 
       <form onSubmit={handleSubmit}>
         <div>
@@ -59,7 +75,9 @@ function AddApplication({ onAddApplication }) {
           </select>
         </div>
 
-        <button type="submit">Save Application</button>
+        <button type="submit">
+          {editingApplication ? 'Update Application' : 'Save Application'}
+        </button>
       </form>
     </section>
   )
