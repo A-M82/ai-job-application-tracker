@@ -1,28 +1,43 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import Dashboard from './pages/Dashboard'
 import AddApplication from './pages/AddApplication'
 
 function App() {
-  const [applications, setApplications] = useState([
-    {
-      company: 'Volkswagen',
-      position: 'Project Manager',
-      status: 'Interview',
-    },
-    {
-      company: 'Siemens Energy',
-      position: 'Senior Project Manager',
-      status: 'Applied',
-    },
-    {
-      company: 'Mapbox',
-      position: 'Principal Technical Program Manager',
-      status: 'Rejected',
-    },
-  ])
+  const [applications, setApplications] = useState(() => {
+    const savedApplications = localStorage.getItem('applications')
+
+    if (savedApplications) {
+      return JSON.parse(savedApplications)
+    }
+
+    return [
+      {
+        company: 'Volkswagen',
+        position: 'Project Manager',
+        status: 'Interview',
+      },
+      {
+        company: 'Siemens Energy',
+        position: 'Senior Project Manager',
+        status: 'Applied',
+      },
+      {
+        company: 'Mapbox',
+        position: 'Principal Technical Program Manager',
+        status: 'Rejected',
+      },
+    ]
+  })
 
   const [editingIndex, setEditingIndex] = useState(null)
+
+  useEffect(() => {
+    localStorage.setItem(
+      'applications',
+      JSON.stringify(applications)
+    )
+  }, [applications])
 
   function handleAddApplication(newApplication) {
     setApplications([...applications, newApplication])
