@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import Dashboard from './pages/Dashboard'
 import AddApplication from './pages/AddApplication'
@@ -6,6 +6,9 @@ import Analytics from './pages/Analytics'
 import InterviewPrep from './pages/InterviewPrep'
 
 function App() {
+  const dashboardRef = useRef(null)
+  const addApplicationRef = useRef(null)
+
   const [applications, setApplications] = useState(() => {
     const savedApplications = localStorage.getItem('applications')
 
@@ -41,6 +44,12 @@ function App() {
     )
   }, [applications])
 
+  function scrollToSection(sectionRef) {
+    sectionRef.current.scrollIntoView({
+      behavior: 'smooth',
+    })
+  }
+
   function handleAddApplication(newApplication) {
     setApplications([...applications, newApplication])
   }
@@ -68,6 +77,7 @@ function App() {
 
   function handleEditApplication(index) {
     setEditingIndex(index)
+    scrollToSection(addApplicationRef)
   }
 
   return (
@@ -83,8 +93,16 @@ function App() {
         </p>
 
         <div className="actions">
-          <button>View Applications</button>
-          <button className="secondary">Add New Application</button>
+          <button onClick={() => scrollToSection(dashboardRef)}>
+            View Applications
+          </button>
+
+          <button
+            className="secondary"
+            onClick={() => scrollToSection(addApplicationRef)}
+          >
+            Add New Application
+          </button>
         </div>
       </section>
 
@@ -105,17 +123,21 @@ function App() {
         </div>
       </section>
 
-      <Dashboard
-        applications={applications}
-        onDeleteApplication={handleDeleteApplication}
-        onEditApplication={handleEditApplication}
-      />
+      <section ref={dashboardRef}>
+        <Dashboard
+          applications={applications}
+          onDeleteApplication={handleDeleteApplication}
+          onEditApplication={handleEditApplication}
+        />
+      </section>
 
-      <AddApplication
-        onAddApplication={handleAddApplication}
-        onUpdateApplication={handleUpdateApplication}
-        editingApplication={applications[editingIndex]}
-      />
+      <section ref={addApplicationRef}>
+        <AddApplication
+          onAddApplication={handleAddApplication}
+          onUpdateApplication={handleUpdateApplication}
+          editingApplication={applications[editingIndex]}
+        />
+      </section>
 
       <Analytics applications={applications} />
 

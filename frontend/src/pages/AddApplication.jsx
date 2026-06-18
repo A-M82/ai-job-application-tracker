@@ -16,6 +16,11 @@ function AddApplication({
       setPosition(editingApplication.position)
       setStatus(editingApplication.status)
       setNotes(editingApplication.notes || '')
+    } else {
+      setCompany('')
+      setPosition('')
+      setStatus('Applied')
+      setNotes('')
     }
   }, [editingApplication])
 
@@ -50,7 +55,7 @@ function AddApplication({
           <label>Company</label>
           <input
             type="text"
-            placeholder="Volkswagen"
+            placeholder="Write company name"
             value={company}
             onChange={(event) => setCompany(event.target.value)}
           />
@@ -60,7 +65,7 @@ function AddApplication({
           <label>Position</label>
           <input
             type="text"
-            placeholder="Project Manager"
+            placeholder="Write position title"
             value={position}
             onChange={(event) => setPosition(event.target.value)}
           />
@@ -82,7 +87,7 @@ function AddApplication({
         <div>
           <label>Notes</label>
           <textarea
-            placeholder="Interview scheduled for Friday..."
+            placeholder="Add notes about this application"
             value={notes}
             onChange={(event) => setNotes(event.target.value)}
           />
