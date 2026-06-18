@@ -8,6 +8,8 @@ import InterviewPrep from './pages/InterviewPrep'
 function App() {
   const dashboardRef = useRef(null)
   const addApplicationRef = useRef(null)
+  const analyticsRef = useRef(null)
+  const interviewPrepRef = useRef(null)
 
   const [applications, setApplications] = useState(() => {
     const savedApplications = localStorage.getItem('applications')
@@ -107,17 +109,17 @@ function App() {
       </section>
 
       <section className="features">
-        <div>
+        <div onClick={() => scrollToSection(dashboardRef)}>
           <h2>Application Tracking</h2>
           <p>Organize companies, positions, salaries, contacts, and status updates.</p>
         </div>
 
-        <div>
+        <div onClick={() => scrollToSection(interviewPrepRef)}>
           <h2>AI Interview Prep</h2>
           <p>Generate interview questions and preparation tips based on job descriptions.</p>
         </div>
 
-        <div>
+        <div onClick={() => scrollToSection(analyticsRef)}>
           <h2>Analytics</h2>
           <p>Understand success rates, interview progress, and rejection patterns.</p>
         </div>
@@ -139,9 +141,13 @@ function App() {
         />
       </section>
 
-      <Analytics applications={applications} />
+      <section ref={analyticsRef}>
+        <Analytics applications={applications} />
+      </section>
 
-      <InterviewPrep applications={applications} />
+      <section ref={interviewPrepRef}>
+        <InterviewPrep applications={applications} />
+      </section>
     </main>
   )
 }
