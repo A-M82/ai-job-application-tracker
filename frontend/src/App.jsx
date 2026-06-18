@@ -85,8 +85,6 @@ function App() {
   return (
     <main className="app">
       <section className="hero">
-        <p className="badge">AI Full Stack Bootcamp Project</p>
-
         <h1>AI Job Application Tracker</h1>
 
         <p className="subtitle">
