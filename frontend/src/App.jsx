@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import Dashboard from './pages/Dashboard'
 import AddApplication from './pages/AddApplication'
@@ -6,6 +6,11 @@ import Analytics from './pages/Analytics'
 import InterviewPrep from './pages/InterviewPrep'
 
 function App() {
+  const dashboardRef = useRef(null)
+  const addApplicationRef = useRef(null)
+  const analyticsRef = useRef(null)
+  const interviewPrepRef = useRef(null)
+
   const [applications, setApplications] = useState(() => {
     const savedApplications = localStorage.getItem('applications')
 
@@ -41,6 +46,12 @@ function App() {
     )
   }, [applications])
 
+  function scrollToSection(sectionRef) {
+    sectionRef.current.scrollIntoView({
+      behavior: 'smooth',
+    })
+  }
+
   function handleAddApplication(newApplication) {
     setApplications([...applications, newApplication])
   }
@@ -68,13 +79,12 @@ function App() {
 
   function handleEditApplication(index) {
     setEditingIndex(index)
+    scrollToSection(addApplicationRef)
   }
 
   return (
     <main className="app">
       <section className="hero">
-        <p className="badge">AI Full Stack Bootcamp Project</p>
-
         <h1>AI Job Application Tracker</h1>
 
         <p className="subtitle">
@@ -83,43 +93,59 @@ function App() {
         </p>
 
         <div className="actions">
-          <button>View Applications</button>
-          <button className="secondary">Add New Application</button>
+          <button onClick={() => scrollToSection(dashboardRef)}>
+            View Applications
+          </button>
+
+          <button
+            className="secondary"
+            onClick={() => scrollToSection(addApplicationRef)}
+          >
+            Add New Application
+          </button>
         </div>
       </section>
 
       <section className="features">
-        <div>
+        <div onClick={() => scrollToSection(dashboardRef)}>
           <h2>Application Tracking</h2>
           <p>Organize companies, positions, salaries, contacts, and status updates.</p>
         </div>
 
-        <div>
+        <div onClick={() => scrollToSection(interviewPrepRef)}>
           <h2>AI Interview Prep</h2>
           <p>Generate interview questions and preparation tips based on job descriptions.</p>
         </div>
 
-        <div>
+        <div onClick={() => scrollToSection(analyticsRef)}>
           <h2>Analytics</h2>
           <p>Understand success rates, interview progress, and rejection patterns.</p>
         </div>
       </section>
 
-      <Dashboard
-        applications={applications}
-        onDeleteApplication={handleDeleteApplication}
-        onEditApplication={handleEditApplication}
-      />
+      <section ref={dashboardRef}>
+        <Dashboard
+          applications={applications}
+          onDeleteApplication={handleDeleteApplication}
+          onEditApplication={handleEditApplication}
+        />
+      </section>
 
-      <AddApplication
-        onAddApplication={handleAddApplication}
-        onUpdateApplication={handleUpdateApplication}
-        editingApplication={applications[editingIndex]}
-      />
+      <section ref={addApplicationRef}>
+        <AddApplication
+          onAddApplication={handleAddApplication}
+          onUpdateApplication={handleUpdateApplication}
+          editingApplication={applications[editingIndex]}
+        />
+      </section>
 
-      <Analytics applications={applications} />
+      <section ref={analyticsRef}>
+        <Analytics applications={applications} />
+      </section>
 
-      <InterviewPrep applications={applications} />
+      <section ref={interviewPrepRef}>
+        <InterviewPrep applications={applications} />
+      </section>
     </main>
   )
 }
