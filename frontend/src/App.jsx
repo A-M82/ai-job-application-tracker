@@ -11,6 +11,17 @@ function App() {
   const analyticsRef = useRef(null)
   const interviewPrepRef = useRef(null)
 
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('isLoggedIn') === 'true'
+  })
+
+  const [userName, setUserName] = useState(() => {
+    return localStorage.getItem('userName') || ''
+  })
+
+  const [loginInput, setLoginInput] = useState('')
+  const [passwordInput, setPasswordInput] = useState('')
+
   const [applications, setApplications] = useState(() => {
     const savedApplications = localStorage.getItem('applications')
 
@@ -45,6 +56,29 @@ function App() {
       JSON.stringify(applications)
     )
   }, [applications])
+
+  function handleLogin(event) {
+    event.preventDefault()
+
+    if (!loginInput.trim() || !passwordInput.trim()) {
+      return
+    }
+
+    localStorage.setItem('isLoggedIn', 'true')
+    localStorage.setItem('userName', loginInput)
+
+    setUserName(loginInput)
+    setIsLoggedIn(true)
+    setLoginInput('')
+    setPasswordInput('')
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('isLoggedIn')
+    localStorage.removeItem('userName')
+    setIsLoggedIn(false)
+    setUserName('')
+  }
 
   function scrollToSection(sectionRef) {
     sectionRef.current.scrollIntoView({
@@ -82,14 +116,53 @@ function App() {
     scrollToSection(addApplicationRef)
   }
 
+  if (!isLoggedIn) {
+    return (
+      <main className="app">
+        <section className="hero">
+          <h1>AI Job Application Tracker</h1>
+
+          <p className="subtitle">
+            Log in to manage your job applications, track your progress,
+            and prepare for interviews.
+          </p>
+
+          <form onSubmit={handleLogin}>
+            <div>
+              <label>Name or Email</label>
+              <input
+                type="text"
+                placeholder="Enter your name or email"
+                value={loginInput}
+                onChange={(event) => setLoginInput(event.target.value)}
+              />
+            </div>
+
+            <div>
+              <label>Password</label>
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={passwordInput}
+                onChange={(event) => setPasswordInput(event.target.value)}
+              />
+            </div>
+
+            <button type="submit">Login</button>
+          </form>
+        </section>
+      </main>
+    )
+  }
+
   return (
     <main className="app">
       <section className="hero">
         <h1>AI Job Application Tracker</h1>
 
         <p className="subtitle">
-          Manage job applications, track progress, prepare for interviews,
-          and gain insights into your job search process.
+          Welcome, {userName}. Manage job applications, track progress,
+          prepare for interviews, and gain insights into your job search process.
         </p>
 
         <div className="actions">
@@ -102,6 +175,10 @@ function App() {
             onClick={() => scrollToSection(addApplicationRef)}
           >
             Add New Application
+          </button>
+
+          <button className="secondary" onClick={handleLogout}>
+            Logout
           </button>
         </div>
       </section>
