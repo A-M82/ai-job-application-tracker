@@ -191,7 +191,10 @@ function App() {
 
         <div onClick={() => scrollToSection(interviewPrepRef)}>
           <h2>AI Interview Prep</h2>
-          <p>Generate interview questions and preparation tips based on job descriptions.</p>
+          <p>
+            Generate interviewer-led questions and role-specific prompts for
+            interview-stage applications.
+          </p>
         </div>
 
         <div onClick={() => scrollToSection(analyticsRef)}>
@@ -210,6 +213,7 @@ function App() {
 
       <section ref={addApplicationRef}>
         <AddApplication
+          key={editingIndex === null ? 'new-application' : `edit-${editingIndex}`}
           onAddApplication={handleAddApplication}
           onUpdateApplication={handleUpdateApplication}
           editingApplication={applications[editingIndex]}

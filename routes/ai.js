@@ -84,4 +84,39 @@ router.post('/extract-job', async (req, res) => {
   }
 });
 
+// POST /api/ai/interview-questions — generate tailored interview questions
+router.post('/interview-questions', async (req, res) => {
+  const { jobDescription, role, company } = req.body;
+
+  if (!jobDescription && !role) {
+    return res.status(400).json({ error: 'jobDescription or role is required' });
+  }
+
+  try {
+    const prompt = `Generate up to 10 concise, focused interview questions tailored for the role: ${role || 'N/A'} at ${company || 'N/A'}.\nJob description:\n${jobDescription || 'Not provided.'}`;
+
+    const completion = await client.chat.completions.create({
+      model: 'gpt-5.4-mini',
+      messages: [
+        { role: 'system', content: 'You are an interview coach who writes focused, relevant interview questions.' },
+        { role: 'user', content: prompt },
+      ],
+    });
+
+    const text = completion.choices[0].message.content;
+    // Split by lines and filter empty items; if response is a JSON array, try to parse it
+    let questions = [];
+    try {
+      const parsed = JSON.parse(text);
+      if (Array.isArray(parsed)) questions = parsed;
+    } catch (e) {
+      questions = text.split(/\r?\n+/).map((s) => s.replace(/^\d+\.\s*/, '').trim()).filter(Boolean);
+    }
+
+    res.json({ questions });
+  } catch (err) {
+    res.status(502).json({ error: 'Failed to generate interview questions', details: err.message });
+  }
+});
+
 module.exports = router;

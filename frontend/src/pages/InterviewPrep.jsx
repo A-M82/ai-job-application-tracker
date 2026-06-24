@@ -1,77 +1,118 @@
 import { useState } from 'react'
 
+function buildInterviewPrep(application) {
+  const role = application.position || 'this role'
+  const company = application.company || 'the company'
+
+  return {
+    interviewerQuestions: [
+      `Can you walk me through your recent experience that is most relevant to ${role}?`,
+      `Tell me about a time you handled a difficult challenge similar to what someone at ${company} might face.`,
+      `How do you prioritize competing deadlines when multiple stakeholders need your attention?`,
+      `What would success look like in your first 90 days in ${role}?`,
+      `How do you respond to feedback when a project changes direction?`,
+    ],
+    positionQuestions: [
+      `What are the top priorities for ${role} in the first 6 months?`,
+      `How does the team at ${company} measure success in this position?`,
+      `What are the biggest challenges someone in ${role} should be prepared for?`,
+      `How does this role collaborate with other teams or departments?`,
+      `What skills or experience make someone especially successful in this position?`,
+    ],
+  }
+}
+
 function InterviewPrep({ applications }) {
-  const [aiConnected, setAiConnected] = useState(false)
+  const [generatedPrep, setGeneratedPrep] = useState({})
 
   const interviewApplications = applications.filter(
     (application) => application.status === 'Interview'
   )
+
+  function getPrepKey(application, index) {
+    return `${application.company || 'company'}::${application.position || 'position'}::${index}`
+  }
+
+  function handleGenerateInterviewPrep() {
+    const prepByApplication = {}
+
+    interviewApplications.forEach((application, index) => {
+      const key = getPrepKey(application, index)
+      prepByApplication[key] = buildInterviewPrep(application)
+    })
+
+    setGeneratedPrep(prepByApplication)
+  }
 
   return (
     <section className="dashboard">
       <h2>AI Interview Preparation</h2>
 
       <p>
-        Prepare for upcoming interviews with suggested focus areas and
-        practice questions.
+       Generate interviewer-led questions for each interview stage role, plus
+       role-specific questions the candidate should be ready to answer.
       </p>
 
-      {!aiConnected ? (
-        <div style={{ textAlign: 'center', margin: '25px 0' }}>
-          <button onClick={() => setAiConnected(true)}>
-            Connect AI Tool
-          </button>
-        </div>
-      ) : (
-        <div
-          style={{
-            background: '#ecfdf5',
-            border: '1px solid #10b981',
-            padding: '16px',
-            borderRadius: '10px',
-            marginBottom: '25px',
-            textAlign: 'center',
-          }}
-        >
-          <strong>AI Tool Connected Successfully</strong>
-          <br />
-          Your AI tool is ready to be configured. Connect ChatGPT, Gemini,
-          Claude, or another AI assistant to generate customized interview
-          questions based on the selected position and company.
-        </div>
-      )}
+      <div style={{ textAlign: 'center', margin: '25px 0' }}>
+       <button
+         onClick={handleGenerateInterviewPrep}
+         disabled={interviewApplications.length === 0}
+       >
+         Generate Interview Prep
+       </button>
+      </div>
 
       {interviewApplications.length === 0 ? (
-        <p>No interview preparation needed yet.</p>
+       <p>No interview preparation needed yet.</p>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Company</th>
-              <th>Position</th>
-              <th>Suggested Questions</th>
-            </tr>
-          </thead>
+       <table>
+         <thead>
+           <tr>
+             <th>Company</th>
+             <th>Position</th>
+             <th>Questions for the interviewer to ask</th>
+             <th>Questions the candidate may be asked</th>
+           </tr>
+         </thead>
 
-          <tbody>
-            {interviewApplications.map((application, index) => (
-              <tr key={index}>
-                <td>{application.company}</td>
-                <td>{application.position}</td>
-                <td>
-                  Tell me about yourself.
-                  <br />
-                  Why are you interested in this role?
-                  <br />
-                  What relevant experience do you bring?
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+         <tbody>
+           {interviewApplications.map((application, index) => (
+             <tr key={getPrepKey(application, index)}>
+               <td>{application.company}</td>
+               <td>{application.position}</td>
+               <td>
+                 {generatedPrep[getPrepKey(application, index)] ? (
+                   <ul>
+                     {generatedPrep[getPrepKey(application, index)].interviewerQuestions.map(
+                       (question) => (
+                         <li key={question}>{question}</li>
+                       )
+                     )}
+                   </ul>
+                 ) : (
+                   <p>Click "Generate Interview Prep" to create interviewer questions.</p>
+                 )}
+               </td>
+               <td>
+                 {generatedPrep[getPrepKey(application, index)] ? (
+                   <ul>
+                     {generatedPrep[getPrepKey(application, index)].positionQuestions.map(
+                       (question) => (
+                         <li key={question}>{question}</li>
+                       )
+                     )}
+                   </ul>
+                 ) : (
+                   <p>Click "Generate Interview Prep" to create position-specific questions.</p>
+                 )}
+               </td>
+             </tr>
+           ))}
+         </tbody>
+       </table>
       )}
     </section>
   )
 }
-//work?
+
 export default InterviewPrep

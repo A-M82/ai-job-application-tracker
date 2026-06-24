@@ -217,6 +217,16 @@ td button {
   padding: 8px 12px;
 }
 
+
+.dashboard ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.dashboard li + li {
+  margin-top: 8px;
+}
+
 @media (max-width: 800px) {
   .features,
   .stats {
